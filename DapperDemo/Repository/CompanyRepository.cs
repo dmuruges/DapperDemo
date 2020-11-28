@@ -22,7 +22,18 @@ namespace DapperDemo.Repository
 
         public Company Add(Company company)
         {
-            throw new NotImplementedException();
+            var sql = "INSERT INTO Companies (Name, Address, City, State, PostalCode) VALUES(@Name, @Address, @City, @State, @PostalCode);"
+                        + "SELECT CAST(SCOPE_IDENTITY() as int);";
+            var id = db.Query<int>(sql, new
+            {
+                company.Name,
+                company.Address,
+                company.City,
+                company.State,
+                company.PostalCode
+            }).Single();
+            company.CompanyId = id;
+            return company;
         }
 
         public Company Find(int id)
